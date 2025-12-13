@@ -1,0 +1,230 @@
+<div class="ai-panel card" ng-class="{'show': vm.showPanel}">
+  <div class="ai-panel-header">
+    <h3 class="ai-panel-title">AI Image Generation</h3>
+    <button class="btn-close" ng-click="vm.closePanel()">&times;</button>
+  </div>
+  
+  <div class="ai-panel-content">
+    <!-- API Key Configuration -->
+    <div class="api-key-section">
+      <div class="form-group">
+        <label for="apiKeyInput">Hugging Face API Key:</label>
+        <input 
+          type="password" 
+          id="apiKeyInput"
+          class="form-control"
+          placeholder="Enter your API Key"
+          ng-model="vm.apiKey"
+          ng-change="vm.updateApiKey()"
+        >
+        <small class="form-text">
+          Get your API Key from <a href="https://huggingface.co/settings/tokens" target="_blank">Hugging Face</a>
+        </small>
+      </div>
+    </div>
+    
+    <!-- Prompt Input -->
+    <div class="prompt-section">
+      <div class="form-group">
+        <label for="promptInput">Generation Prompt:</label>
+        <textarea 
+          id="promptInput"
+          class="form-control"
+          rows="3"
+          placeholder="Describe the image you want to generate..."
+          ng-model="vm.prompt"
+          ng-change="vm.updatePromptSuggestions()"
+        ></textarea>
+        
+        <!-- Prompt Suggestions -->
+        <div class="prompt-suggestions" ng-if="vm.suggestions.length > 0">
+          <p class="suggestions-title">Suggestions:</p>
+          <div class="suggestions-list">
+            <button 
+              class="btn-suggestion"
+              ng-repeat="suggestion in vm.suggestions"
+              ng-click="vm.selectSuggestion(suggestion)"
+            >
+              {{ suggestion }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Model Selection -->
+    <div class="model-section">
+      <div class="form-group">
+        <label for="modelSelect">AI Model:</label>
+        <select 
+          id="modelSelect"
+          class="form-control"
+          ng-model="vm.selectedModel"
+        >
+          <option value="stabilityai/stable-diffusion-xl-base-1.0">Stable Diffusion XL</option>
+          <option value="Qwen/Qwen-Image-Edit">Qwen Image Edit</option>
+        </select>
+      </div>
+    </div>
+    
+    <!-- Generation Parameters -->
+    <div class="parameters-section">
+      <h4>Generation Parameters</h4>
+      
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="widthInput">Width:</label>
+            <input 
+              type="number" 
+              id="widthInput"
+              class="form-control"
+              ng-model="vm.parameters.width"
+              min="256"
+              max="2048"
+              step="64"
+            >
+          </div>
+        </div>
+        
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="heightInput">Height:</label>
+            <input 
+              type="number" 
+              id="heightInput"
+              class="form-control"
+              ng-model="vm.parameters.height"
+              min="256"
+              max="2048"
+              step="64"
+            >
+          </div>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="styleInput">Style:</label>
+        <select 
+          id="styleInput"
+          class="form-control"
+          ng-model="vm.parameters.style"
+        >
+          <option value="realistic">Realistic</option>
+          <option value="anime">Anime</option>
+          <option value="cartoon">Cartoon</option>
+          <option value="digital-art">Digital Art</option>
+          <option value="oil-painting">Oil Painting</option>
+          <option value="watercolor">Watercolor</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label for="stepsInput">Generation Steps:</label>
+        <input 
+          type="number" 
+          id="stepsInput"
+          class="form-control"
+          ng-model="vm.parameters.steps"
+          min="10"
+          max="100"
+          step="5"
+        >
+      </div>
+      
+      <div class="form-group">
+        <label for="cfgScaleInput">CFG Scale:</label>
+        <input 
+          type="number" 
+          id="cfgScaleInput"
+          class="form-control"
+          ng-model="vm.parameters.cfg_scale"
+          min="1"
+          max="20"
+          step="0.5"
+        >
+      </div>
+    </div>
+    
+    <!-- Generation Progress -->
+    <div class="progress-section" ng-if="vm.generating">
+      <div class="progress">
+        <div 
+          class="progress-bar progress-bar-striped progress-bar-animated"
+          role="progressbar"
+          ng-style="{ width: vm.generationProgress + '%' }"
+          aria-valuenow="{{ vm.generationProgress }}"
+          aria-valuemin="0"
+          aria-valuemax="100"
+        >
+          {{ vm.generationProgress }}%
+        </div>
+      </div>
+      <p class="progress-text">Generating image...</p>
+    </div>
+    
+    <!-- Generation Controls -->
+    <div class="generation-controls">
+      <button 
+        class="btn btn-primary btn-lg btn-block"
+        ng-disabled="vm.generating || vm.batchGenerating || !vm.prompt.trim() || !vm.apiKey.trim()"
+        ng-click="vm.generateImage()"
+      >
+        <span ng-if="!vm.generating && !vm.batchGenerating">Generate Image</span>
+        <span ng-if="vm.generating && !vm.batchGenerating">Generating...</span>
+      </button>
+      
+      <!-- Batch Generation -->
+      <div class="batch-generation-section">
+        <div class="form-group">
+          <label for="batchSizeInput">Batch Size:</label>
+          <input 
+            type="number" 
+            id="batchSizeInput"
+            class="form-control"
+            min="2"
+            max="5"
+            ng-model="vm.batchSize"
+            ng-disabled="vm.generating || vm.batchGenerating"
+          >
+        </div>
+        <button 
+          class="btn btn-secondary btn-lg btn-block"
+          ng-disabled="vm.generating || vm.batchGenerating || !vm.prompt.trim() || !vm.apiKey.trim() || vm.batchSize < 2 || vm.batchSize > 5"
+          ng-click="vm.batchGenerateImages()"
+        >
+          <span ng-if="!vm.batchGenerating">Batch Generate</span>
+          <span ng-if="vm.batchGenerating">Batch Generating...</span>
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Generation History -->
+  <div class="ai-panel-footer">
+    <div class="history-section">
+      <h4>Generation History</h4>
+      <div class="history-list" ng-if="vm.history.length > 0">
+        <div 
+          class="history-item"
+          ng-repeat="item in vm.history"
+          ng-click="vm.loadHistoryItem(item)"
+        >
+          <div class="history-image" ng-if="item.status === 'completed'">
+            <img src="{{ item.imageUrl }}" alt="Generated image" class="history-thumbnail">
+          </div>
+          <div class="history-info">
+            <p class="history-prompt">{{ item.prompt }}</p>
+            <p class="history-meta">
+              {{ item.status === 'completed' ? 'Success' : 'Failed' }} • 
+              {{ item.createdAt | date: 'yyyy-MM-dd HH:mm' }}
+            </p>
+          </div>
+        </div>
+      </div>
+      <p class="no-history" ng-if="vm.history.length === 0">
+        No generation history yet
+      </p>
+    </div>
+  </div>
+</div>

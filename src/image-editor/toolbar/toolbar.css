@@ -1,0 +1,98 @@
+/* Toolbar Container */
+.toolbar-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: var(--primary-grey);
+  border-radius: var(--border-radius-inputs);
+  margin-bottom: 1rem;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+/* Toolbar Sections */
+.toolbar-section {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  flex-grow: 1;
+  flex-shrink: 0;
+  min-width: 0;
+}
+
+/* Toolbar Buttons */
+.toolbar-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--secondary-grey);
+  border-radius: var(--border-radius-buttons);
+  background-color: var(--white);
+  color: var(--text-color);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  min-width: 70px;
+  flex-grow: 1;
+  flex-shrink: 0;
+  flex-basis: 0;
+  max-width: 120px;
+  font-family: var(--primary-font);
+}
+
+.toolbar-btn:hover {
+  border-color: var(--black);
+  font-variation-settings: 'wght' var(--font-weight-medium), 'slnt' var(--font-slant-italic);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.toolbar-btn:focus {
+  outline: 2px solid var(--black);
+  outline-offset: 2px;
+}
+
+.toolbar-btn.active {
+  background-color: var(--black);
+  color: var(--white);
+  border-color: var(--black);
+}
+
+/* Toolbar Icons */
+.toolbar-icon {
+  font-size: 1.25rem;
+  margin-bottom: 0.25rem;
+}
+
+/* Toolbar Labels */
+.toolbar-label {
+  font-size: 0.75rem;
+  font-weight: var(--font-weight-normal);
+  font-variation-settings: 'wght' var(--font-weight-normal), 'slnt' var(--font-slant-normal);
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+  .toolbar-container {
+    padding: 0.75rem;
+    gap: 0.75rem;
+  }
+  
+  .toolbar-section {
+    gap: 0.375rem;
+  }
+  
+  .toolbar-btn {
+    padding: 0.5rem 0.75rem;
+    min-width: 60px;
+  }
+  
+  .toolbar-icon {
+    font-size: 1rem;
+  }
+  
+  .toolbar-label {
+    font-size: 0.6875rem;
+  }
+}

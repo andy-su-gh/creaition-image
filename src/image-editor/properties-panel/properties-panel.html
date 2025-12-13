@@ -1,0 +1,75 @@
+<div class="properties-panel-overlay" ng-click="vm.onOverlayClick()" ng-class="{'show': vm.showPanel}"></div>
+<div class="properties-panel-container" ng-class="{'show': vm.showPanel}">
+  <div class="properties-panel-header">
+    <h6 class="properties-panel-title">Properties Panel</h6>
+    <button class="properties-panel-close" ng-click="vm.onCloseClick()" title="Close">
+      ✕
+    </button>
+  </div>
+  
+  <div class="properties-panel-content">
+    <div class="properties-section" ng-if="vm.activeTool === 'crop'">
+      <h7 class="properties-section-title">Crop Settings</h7>
+      <div class="form-group">
+        <label for="crop-width">Width:</label>
+        <input type="number" id="crop-width" ng-model="vm.cropWidth" min="1">
+      </div>
+      <div class="form-group">
+        <label for="crop-height">Height:</label>
+        <input type="number" id="crop-height" ng-model="vm.cropHeight" min="1">
+      </div>
+      <div class="form-group">
+        <label for="crop-ratio">Ratio:</label>
+        <select id="crop-ratio" ng-model="vm.cropRatio">
+          <option value="">Free</option>
+          <option value="1:1">1:1</option>
+          <option value="4:3">4:3</option>
+          <option value="16:9">16:9</option>
+        </select>
+      </div>
+    </div>
+    
+    <div class="properties-section" ng-if="vm.activeTool === 'draw'">
+      <h7 class="properties-section-title">Draw Settings</h7>
+      <div class="form-group">
+        <label for="draw-color">Color:</label>
+        <input type="color" id="draw-color" ng-model="vm.drawColor" value="#000000">
+      </div>
+      <div class="form-group">
+        <label for="draw-width">Width:</label>
+        <input type="range" id="draw-width" ng-model="vm.drawWidth" min="1" max="20" value="5">
+      </div>
+    </div>
+    
+    <div class="properties-section" ng-if="vm.activeTool === 'text'">
+      <h7 class="properties-section-title">Text Settings</h7>
+      <div class="form-group">
+        <label for="text-content">Content:</label>
+        <input type="text" id="text-content" ng-model="vm.textContent" placeholder="Enter text">
+      </div>
+      <div class="form-group">
+        <label for="text-size">Size:</label>
+        <input type="number" id="text-size" ng-model="vm.textSize" min="8" max="72" value="24">
+      </div>
+      <div class="form-group">
+        <label for="text-color">Color:</label>
+        <input type="color" id="text-color" ng-model="vm.textColor" value="#000000">
+      </div>
+    </div>
+    
+    <div class="properties-section" ng-if="vm.activeTool === 'filter'">
+      <h7 class="properties-section-title">Filter Settings</h7>
+      <div class="filter-presets">
+        <button class="filter-preset" ng-click="vm.applyFilter('grayscale')">Grayscale</button>
+        <button class="filter-preset" ng-click="vm.applyFilter('sepia')">Sepia</button>
+        <button class="filter-preset" ng-click="vm.applyFilter('brightness')">Brightness</button>
+        <button class="filter-preset" ng-click="vm.applyFilter('contrast')">Contrast</button>
+      </div>
+    </div>
+  </div>
+  
+  <div class="properties-panel-footer">
+    <button class="btn-cancel" ng-click="vm.onCancelClick()">Cancel</button>
+    <button class="btn-apply" ng-click="vm.onApplyClick()">Apply</button>
+  </div>
+</div>

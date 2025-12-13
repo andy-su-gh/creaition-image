@@ -1,0 +1,156 @@
+:root {
+  /* Creaition Design System Variables */
+  /* Fonts */
+  --primary-font: "strokeWeight(var)", "Eina03-Regular", system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --secondary-font: "Eina03-Regular", system-ui, Avenir, Helvetica, Arial, sans-serif;
+  
+  /* Colors */
+  --primary-grey: #efefee;
+  --secondary-grey: #bebebe;
+  --background-color: #f0f0f0;
+  --white: #ffffff;
+  --black: #000000;
+  --text-color: #000000;
+  
+  /* Borders and Spacing */
+  --border-radius-buttons: 50px;
+  --border-radius-inputs: 0px;
+  --border-radius-cards: 1rem;
+  --button-height: 35px;
+  --input-height: 50px;
+  
+  /* Font Variations */
+  --font-weight-normal: 60;
+  --font-weight-medium: 80;
+  --font-weight-semibold: 120;
+  --font-slant-normal: 0;
+  --font-slant-italic: 12;
+  
+  /* Base Styles */
+  font-family: var(--primary-font);
+  line-height: 1.5;
+  font-weight: var(--font-weight-normal);
+  font-variation-settings: 'wght' var(--font-weight-normal), 'slnt' var(--font-slant-normal);
+
+  color: var(--text-color);
+  background-color: var(--background-color);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: var(--background-color);
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+#app {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.vanilla:hover {
+  filter: drop-shadow(0 0 2em #3178c6aa);
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+button {
+  border-radius: var(--border-radius-buttons);
+  border: 1px solid var(--secondary-grey);
+  padding: 0.5em 1.5em;
+  height: var(--button-height);
+  min-height: var(--button-height);
+  font-size: 1em;
+  font-weight: var(--font-weight-normal);
+  font-family: var(--primary-font);
+  font-variation-settings: 'wght' var(--font-weight-normal), 'slnt' var(--font-slant-normal);
+  background-color: var(--white);
+  color: var(--black);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: none;
+}
+
+button:hover {
+  border-color: var(--black);
+  font-variation-settings: 'wght' var(--font-weight-medium), 'slnt' var(--font-slant-italic);
+  transform: translateY(-1px);
+}
+
+button:focus,
+button:focus-visible {
+  outline: 2px solid var(--black);
+  outline-offset: 2px;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Creaition Card Styles */
+.card {
+  background-color: var(--white);
+  border-radius: var(--border-radius-cards);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--primary-grey);
+}
+
+/* Input Styles */
+input,
+select,
+textarea {
+  border-radius: var(--border-radius-inputs);
+  border: 1px solid var(--secondary-grey);
+  height: var(--input-height);
+  padding: 0 1rem;
+  font-family: var(--primary-font);
+  font-size: 1em;
+  color: var(--text-color);
+  background-color: var(--white);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 2px solid var(--black);
+  outline-offset: 2px;
+  border-color: var(--black);
+}

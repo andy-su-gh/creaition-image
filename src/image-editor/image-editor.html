@@ -1,0 +1,48 @@
+<div class="image-editor-container card">
+  <div class="image-editor-header">
+    <!-- <h2 class="editor-title">图片编辑器</h2>
+    <button class="btn-download" ng-click="vm.downloadImage()">下载图片啊</button> -->
+  </div>
+  
+  <!-- Toolbar Component -->
+  <toolbar 
+    on-crop="vm.onCropClick()"
+    on-flip="vm.onFlipClick()"
+    on-rotate="vm.onRotateClick()"
+    on-draw="vm.onDrawClick()"
+    on-shape="vm.onShapeClick()"
+    on-text="vm.onTextClick()"
+    on-filter="vm.onFilterClick()"
+    on-undo="vm.onUndoClick()"
+    on-redo="vm.onRedoClick()"
+    on-ai="vm.onAIClick()"
+  ></toolbar>
+  
+  <div class="main-content">
+    <div class="editor-content">
+      <div id="image-editor-container"></div>
+    </div>
+    
+    <!-- Properties Panel Component -->
+    <properties-panel 
+      active-tool="vm.activeTool"
+      show-panel="vm.showPropertiesPanel"
+      on-close="vm.onCloseProperties()"
+      on-apply="vm.onApplyProperties(properties)"
+      on-cancel="vm.onCancelProperties()"
+      class="properties-panel"
+    ></properties-panel>
+    
+    <!-- AI Panel Component -->
+    <ai-panel 
+      show-panel="vm.showAIPanel"
+      on-close="vm.onCloseAI()"
+      on-image-generated="vm.onImageGenerated(imageUrl)"
+      class="ai-panel"
+    ></ai-panel>
+  </div>
+  
+  <div class="image-editor-footer">
+    <p>© 2025 Creaition Design System</p>
+  </div>
+</div>

@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="zh-CN" ng-app="creationImageApp">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="stylesheet" href="/src/style.css" />
+    <link rel="stylesheet" href="/src/image-editor/image-editor.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>%VITE_APP_TITLE%</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="container mt-4" ng-controller="MainController">
+      <header class="mb-4">
+        <h1 class="text-center">Creaition Image Demo</h1>
+        <p class="text-center text-muted">AI-powered Image Creation and Management Tool</p>
+      </header>
+      
+      <div class="row">
+        <div class="col-md-6">
+          <!-- Commented out API Configuration section -->
+          <!-- <div class="card mb-4">
+            <div class="card-header">
+              <h5>API Configuration</h5>
+            </div>
+            <div class="card-body">
+              <div class="mb-3">
+                <label for="apiKey" class="form-label">Hugging Face API Key</label>
+                <div class="input-group">
+                  <input type="password" class="form-control" id="apiKey" ng-model="apiKey" placeholder="Enter your API Key...">
+                  <button class="btn btn-outline-secondary" type="button" ng-click="saveApiKey()">Save</button>
+                </div>
+                <div class="form-text">Get your key: <a href="https://huggingface.co/settings/tokens" target="_blank">Hugging Face Settings</a></div>
+              </div>
+            </div>
+          </div> -->
+          
+          <div class="card mb-4">
+            <div class="card-header">
+              <h5>Image Generation</h5>
+            </div>
+            <div class="card-body">
+              <form ng-submit="generateImage()">
+                <div class="mb-3">
+                  <label for="prompt" class="form-label">Description</label>
+                  <textarea class="form-control" id="prompt" ng-model="prompt" rows="3" placeholder="Enter image description..."></textarea>
+                </div>
+                <!-- Commented out Model and Style sections -->
+                <!-- <div class="mb-3">
+                  <label for="model" class="form-label">Model</label>
+                  <select class="form-select" id="model" ng-model="selectedModel">
+                    <option value="stable-diffusion-xl-base-1.0" selected>Stable Diffusion XL</option>
+                    <option value="qwen-vl-plus">Qwen VL Plus</option>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label for="style" class="form-label">Style</label>
+                  <select class="form-select" id="style" ng-model="selectedStyle">
+                    <option value="realistic">Realistic</option>
+                    <option value="cartoon">Cartoon</option>
+                    <option value="abstract">Abstract</option>
+                    <option value="anime">Anime</option>
+                  </select>
+                </div> -->
+                
+                <!-- Progress Bar -->
+                <div class="mb-3" ng-if="generating">
+                  <div class="progress">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" ng-style="{width: progress + '%'}" aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100">{{progress}}%</div>
+                  </div>
+                </div>
+                
+                <!-- Error Message -->
+                <div class="mb-3" ng-if="error">
+                  <div class="alert alert-danger" role="alert">
+                    {{error}}
+                  </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary w-100" ng-disabled="generating">
+                  <span ng-if="generating" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  {{ generating ? 'Generating...' : 'Generate Image' }}
+                </button>
+              </form>
+            </div>
+          </div>
+          
+          <div class="card">
+            <div class="card-header">
+              <h5>History</h5>
+            </div>
+            <div class="card-body">
+              <ul class="list-group">
+                <li class="list-group-item" ng-repeat="item in history" ng-click="loadHistory(item)">
+                  {{ item.prompt }}
+                  <span class="text-muted float-end">{{ item.timestamp | date:'yyyy-MM-dd HH:mm' }}</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header">
+              <h5>Generation Result</h5>
+            </div>
+            <div class="card-body">
+              <div class="text-center" ng-if="!generatedImage">
+                <p class="text-muted">Click Generate Image to start</p>
+              </div>
+              <div ng-if="generatedImage">
+                <img ng-src="{{ generatedImage }}" alt="Generated image" class="img-fluid rounded mb-3">
+                <div class="d-flex gap-2 mb-3">
+                  <button class="btn btn-secondary flex-fill" ng-click="downloadImage()">Download</button>
+                  <button class="btn btn-primary flex-fill" ng-click="openImageEditor()">Edit</button>
+                  <button class="btn btn-outline-secondary flex-fill" ng-click="clearImage()">Clear</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Image Editor Section -->
+          <div class="image-editor-popup" ng-if="editorState.showEditor && generatedImage">
+            <div class="image-editor-popup-overlay" ng-click="closeImageEditor()"></div>
+            <div class="image-editor-popup-content">
+              <div class="image-editor-popup-header">
+                <h5>Image Editor</h5>
+                <button class="btn btn-sm btn-outline-secondary" ng-click="closeImageEditor()">Close</button>
+              </div>
+              <div class="image-editor-popup-body">
+                <image-editor image-url="generatedImage"></image-editor>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer class="mt-4 text-center text-muted">
+        <p>Creaition Image Demo &copy; {{ currentYear }}</p>
+      </footer>
+    </div>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- TypeScript application -->
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
